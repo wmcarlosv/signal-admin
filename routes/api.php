@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
+
+Route::get('/categories',[ApiController::class,'categories'])->name('categories');
+Route::get('/signals/{category_id}',[ApiController::class,'signals'])->name('signals');
+Route::get('/signal/{id}',[ApiController::class,'signal'])->name('signal');
+Route::post('/student',[ApiController::class,'studentStore'])->name('studentStore');
