@@ -26,7 +26,8 @@ class ApiController extends Controller
 
     public function studentStore(Request $request){
         $email = $request->email;
-        $verify_student = Student::where('email',$email)->get();
+        $verify_student = Student::where('email',$email)->first();
+        
         if($verify_student){
             $student = Student::findorfail($verify_student->id);
         }else{
