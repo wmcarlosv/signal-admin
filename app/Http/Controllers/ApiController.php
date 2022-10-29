@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Signal;
 use App\Models\Student;
+use App\Models\Question;
+use App\Models\Answer;
+use DB;
 
 class ApiController extends Controller
 {
@@ -45,5 +48,80 @@ class ApiController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function get_questions(){
+        $questions = Question::all();
+        $data = [];
+        $cont = 0;
+        foreach($questions as $question){
+            $signal = Signal::where('id',$question->signal_id)->first();
+            $data[$cont]['question_id'] =  $question->id;
+            $data[$cont]['question_cover'] =  $signal->cover;
+            $data[$cont]['question_answers'] = $this->answers($question->id);
+            $cont++;
+        }
+
+        return response()->json($data);
+    }
+
+    public function answers($questions_id){
+        $data = [];
+        $aswers = Answer::select('signal_id','is_correct','id')->where('question_id',$questions_id)->get();
+        $cont = 0;
+        foreach($aswers as $aswer){
+            $signal = Signal::where('id',$aswer->signal_id)->first();
+            $data[$cont]['id'] = $aswer->id;
+            $data[$cont]['name'] = $signal->name;
+            $data[$cont]['is_correct'] = $aswer->is_correct;
+            $cont++;
+        }
+
+        return $data;
+    }
+
+    public function student_answers(Request $request){
+        $student = Student::where('email',$request->email)->first();
+        $practical = DB::table('student_aswers')->where('student_id',$student->id)->get();
+
+        $data = [
+            'student_id'=>$student->id,
+            'total_questions'=>$request->total_questions,
+            'correct'=>$request->correct,
+            'incorrect'=>$request->incorrect,
+            'percentage'=>$request->percentage,
+            'is_fine'=>$request->is_fine
+        ];
+
+        $message = [];
+
+
+        if(count($practical) > 0){
+            if(DB::table('student_aswers')->where('student_id',$practical[0]->student_id)->update($data)){
+                $message = [
+                    'success'=> true,
+                    'messages'=>'Practica Insertada Con Exito!!'
+                ];
+            }else{
+                $message = [
+                        'success'=> false,
+                        'messages'=>'Error al insertar las practicas!!'
+                ];
+            }
+        }else{
+            if(DB::table('student_aswers')->insert($data)){
+                $message = [
+                    'success'=> true,
+                    'messages'=>'Practica Insertada Con Exito!!'
+                ];
+            }else{
+                $message = [
+                    'success'=> false,
+                    'messages'=>'Error al insertar las practicas!!'
+                ];
+            }
+        }
+
+        return response()->json($message);
     }
 }

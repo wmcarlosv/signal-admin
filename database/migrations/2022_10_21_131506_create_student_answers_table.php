@@ -13,14 +13,16 @@ class CreateStudentAnswersTable extends Migration
      */
     public function up()
     {
-        Schema::create('studentaswers', function (Blueprint $table) {
+        Schema::create('student_aswers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('answer_id');
             $table->unsignedBigInteger('student_id');
-            $table->boolean('is_faine')->nullable(false)->default(false);
+            $table->integer('total_questions')->nullable(false);
+            $table->integer('correct')->nullable(false);
+            $table->integer('incorrect')->nullable(false);
+            $table->float('percentage')->nullable(false);
+            $table->boolean('is_fine')->nullable(false);
             $table->timestamps();
 
-            $table->foreign('answer_id')->references('id')->on('answers')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('restrict');
         });
     }
@@ -32,6 +34,6 @@ class CreateStudentAnswersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('studentaswers');
+        Schema::dropIfExists('student_aswers');
     }
 }

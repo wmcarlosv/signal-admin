@@ -23,3 +23,6 @@ Route::get('/categories',[ApiController::class,'categories'])->name('categories'
 Route::get('/signals/{category_id}',[ApiController::class,'signals'])->name('signals');
 Route::get('/signal/{id}',[ApiController::class,'signal'])->name('signal');
 Route::post('/student',[ApiController::class,'studentStore'])->name('studentStore');
+Route::get('/get-questions',[ApiController::class,'get_questions'])->name('get_questions');
+
+Route::post('/student-answers',[ApiController::class,'student_answers'])->name('student_answers');
