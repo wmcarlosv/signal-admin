@@ -13,7 +13,7 @@ class CreateStudentAnswersTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_aswers', function (Blueprint $table) {
+        Schema::create('student_answers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id');
             $table->integer('total_questions')->nullable(false);
@@ -34,6 +34,6 @@ class CreateStudentAnswersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_aswers');
+        Schema::dropIfExists('student_answers');
     }
 }

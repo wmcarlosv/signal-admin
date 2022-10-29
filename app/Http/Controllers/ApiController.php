@@ -82,7 +82,7 @@ class ApiController extends Controller
 
     public function student_answers(Request $request){
         $student = Student::where('email',$request->email)->first();
-        $practical = DB::table('student_aswers')->where('student_id',$student->id)->get();
+        $practical = DB::table('student_answers')->where('student_id',$student->id)->get();
 
         $data = [
             'student_id'=>$student->id,
@@ -97,7 +97,7 @@ class ApiController extends Controller
 
 
         if(count($practical) > 0){
-            if(DB::table('student_aswers')->where('student_id',$practical[0]->student_id)->update($data)){
+            if(DB::table('student_answers')->where('student_id',$practical[0]->student_id)->update($data)){
                 $message = [
                     'success'=> true,
                     'messages'=>'Practica Insertada Con Exito!!'
@@ -109,7 +109,7 @@ class ApiController extends Controller
                 ];
             }
         }else{
-            if(DB::table('student_aswers')->insert($data)){
+            if(DB::table('student_answers')->insert($data)){
                 $message = [
                     'success'=> true,
                     'messages'=>'Practica Insertada Con Exito!!'
